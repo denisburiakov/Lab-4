@@ -1,5 +1,6 @@
 package bsu.rfe.java.group10.lab4.Buryakov.varA1;
 
+import java.awt.*;
 import java.io.IOException;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;

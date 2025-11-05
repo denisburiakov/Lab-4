@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.font.FontRenderContext;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -192,16 +191,35 @@ minY
         // Рисуем диагональ /
         canvas.draw(new Line2D.Double(x - halfSize, y + halfSize, x + halfSize, y - halfSize));
     }
+    private boolean isPerfectSquare(double value) {
+        if (value < 0) return false; // Отрицательные числа не могут быть квадратами
+
+        // Округляем до ближайшего целого
+        double sqrt = Math.sqrt(value);
+        long rounded = Math.round(sqrt);
+
+        // Проверяем, равен ли квадрат округленного корня исходному значению
+        // Используем небольшую погрешность для сравнения double
+        return Math.abs(rounded * rounded - value) < 0.0001;
+    }
 
     // Отображение маркеров точек, по которым рисовался график
     protected void paintMarkers(Graphics2D canvas) {
-        canvas.setStroke(markerStroke); // Шаг 1 - Установить специальное перо для черчения контуров маркеров
-        canvas.setColor(Color.BLACK); // Выбрать красный цвета для контуров маркеров
-        canvas.setPaint(Color.BLACK); // Выбрать красный цвет для закрашивания маркеров внутри
-// Шаг 2 - Организовать цикл по всем точкам графика
+        canvas.setStroke(markerStroke);
+
         for (Double[] point : graphicsData) {
             Point2D.Double center = xyToPoint(point[0], point[1]);
-            drawCrossMarker(canvas, center.getX(), center.getY(), 6);
+
+            // Проверяем, является ли значение Y квадратом целого числа
+            if (isPerfectSquare(point[1])) {
+                canvas.setColor(Color.GREEN);
+                canvas.setPaint(Color.GREEN);
+            } else {
+                canvas.setColor(Color.BLACK);
+                canvas.setPaint(Color.BLACK);
+            }
+
+            drawCrossMarker(canvas, center.getX(), center.getY(), 11);
         }
     }
 
@@ -297,8 +315,7 @@ minY
      * смещѐнный по отношению к исходному на deltaX, deltaY
      * К сожалению, стандартного метода, выполняющего такую задачу, нет.
      */
-    protected Point2D.Double shiftPoint(Point2D.Double src, double deltaX,
-                                        double deltaY) {
+    protected Point2D.Double shiftPoint(Point2D.Double src, double deltaX, double deltaY) {
 // Инициализировать новый экземпляр точки
         Point2D.Double dest = new Point2D.Double();
 // Задать еѐ координаты как координаты существующей точки + заданные смещения
