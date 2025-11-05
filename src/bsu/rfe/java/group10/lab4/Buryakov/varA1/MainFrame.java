@@ -22,15 +22,15 @@ import javax.swing.event.MenuListener;
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
     // Начальные размеры окна приложения
-    private static final int WIDTH = 800;
-    private static final int HEIGHT = 600;
+    private static final int WIDTH = 500;
+    private static final int HEIGHT = 300;
 // Объект диалогового окна для выбора файлов
 private JFileChooser fileChooser = null;
     // Пункты меню
-    private JCheckBoxMenuItem showAxisMenuItem;
-    private JCheckBoxMenuItem showMarkersMenuItem;
+    private final JCheckBoxMenuItem showAxisMenuItem;
+    private final JCheckBoxMenuItem showMarkersMenuItem;
     // Компонент-отображатель графика
-    private GraphicsDisplay display = new GraphicsDisplay();
+    private final GraphicsDisplay display = new GraphicsDisplay();
     // Флаг, указывающий на загруженность данных графика
     private boolean fileLoaded = false;
     public MainFrame() {
