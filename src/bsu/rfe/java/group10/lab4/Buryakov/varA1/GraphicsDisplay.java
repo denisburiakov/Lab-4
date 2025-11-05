@@ -181,6 +181,18 @@ minY
         canvas.draw(graphics);
     }
 
+    private void drawCrossMarker(Graphics2D canvas, double x, double y, int size) {
+        int halfSize = size / 2;
+        // Рисуем горизонтальную линию крестика
+        canvas.draw(new Line2D.Double(x - halfSize, y, x + halfSize, y));
+        // Рисуем вертикальную линию крестика
+        canvas.draw(new Line2D.Double(x, y - halfSize, x, y + halfSize));
+        // Рисуем диагональ \
+        canvas.draw(new Line2D.Double(x - halfSize, y - halfSize, x + halfSize, y + halfSize));
+        // Рисуем диагональ /
+        canvas.draw(new Line2D.Double(x - halfSize, y + halfSize, x + halfSize, y - halfSize));
+    }
+
     // Отображение маркеров точек, по которым рисовался график
     protected void paintMarkers(Graphics2D canvas) {
         canvas.setStroke(markerStroke); // Шаг 1 - Установить специальное перо для черчения контуров маркеров
@@ -188,15 +200,8 @@ minY
         canvas.setPaint(Color.BLACK); // Выбрать красный цвет для закрашивания маркеров внутри
 // Шаг 2 - Организовать цикл по всем точкам графика
         for (Double[] point : graphicsData) {
-            Ellipse2D.Double marker = new Ellipse2D.Double(); // Инициализировать эллипс как объект для представления маркера
-/* Эллипс будет задаваться посредством указания координат
-его центра
-и угла прямоугольника, в который он вписан */
-            Point2D.Double center = xyToPoint(point[0], point[1]); // Центр - в точке (x,y)
-            Point2D.Double corner = shiftPoint(center, 3, 3); // Угол прямоугольника - отстоит на расстоянии (3,3)
-            marker.setFrameFromCenter(center, corner); // Задать эллипс по центру и диагонали
-            canvas.draw(marker); // Начертить контур маркера
-            canvas.fill(marker); // Залить внутреннюю область маркера
+            Point2D.Double center = xyToPoint(point[0], point[1]);
+            drawCrossMarker(canvas, center.getX(), center.getY(), 6);
         }
     }
 
