@@ -27,6 +27,8 @@ public class GraphicsDisplay extends JPanel {
     private double minY;
     private double maxY;
     // Используемый масштаб отображения
+    private double scaleX;
+    private double scaleY;
     private double scale;
     // Различные стили черчения линий
     private final BasicStroke graphicsStroke;
@@ -78,7 +80,7 @@ public class GraphicsDisplay extends JPanel {
          * Эта функциональность - единственное, что осталось в наследство от
          * paintComponent класса JPanel
          */
-        super.paintComponent(g);
+           super.paintComponent(g);
 // Шаг 2 - Если данные графика не загружены (при показе компонента при запуске программы) - ничего не делать
         if (graphicsData == null || graphicsData.length == 0) return;
 // Шаг 3 - Определить минимальное и максимальное значения для координат X и Y
@@ -101,11 +103,10 @@ public class GraphicsDisplay extends JPanel {
 и Y - сколько пикселов
 * приходится на единицу длины по X и по Y
 */
-        double scaleX = getSize().getWidth() / (maxX - minX);
-        double scaleY = getSize().getHeight() / (maxY - minY);
+        scaleX = getSize().getWidth() / (maxX - minX);
+        scaleY = getSize().getHeight() / (maxY - minY);
 // Шаг 5 - Чтобы изображение было неискажѐнным - масштаб должен быть одинаков
-// Выбираем за основу минимальный
-        scale = Math.min(scaleX, scaleY);
+// Выбираем за основу минимальны
 // Шаг 6 - корректировка границ отображаемой области согласно выбранному масштабу
         if (scale == scaleX) {
 /* Если за основу был взят масштаб по оси X, значит по оси Y
@@ -308,7 +309,7 @@ minY
         double deltaX = x - minX;
 // Вычисляем смещение Y от точки верхней точки (maxY)
         double deltaY = maxY - y;
-        return new Point2D.Double(deltaX * scale, deltaY * scale);
+        return new Point2D.Double(deltaX * scaleX, deltaY * scaleY);
     }
 
     /* Метод-помощник, возвращающий экземпляр класса Point2D.Double
@@ -319,7 +320,7 @@ minY
 // Инициализировать новый экземпляр точки
         Point2D.Double dest = new Point2D.Double();
 // Задать еѐ координаты как координаты существующей точки + заданные смещения
-        dest.setLocation(src.getX() + deltaX, src.getY() + deltaY);
+        dest.setLocation(deltaX * src.getX(), deltaY * src.getY());
         return dest;
     }
 }
